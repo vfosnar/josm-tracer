@@ -51,8 +51,6 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
         TracerLonSignComboBox = new javax.swing.JComboBox();
         TracerLonLabel = new javax.swing.JLabel();
         RuianConfigPanel = new javax.swing.JPanel();
-        RuianUrlCheckBox = new javax.swing.JCheckBox();
-        RuianUrlValueField = new javax.swing.JTextField();
         RuianAdjustCheckBox = new javax.swing.JCheckBox();
         RuianLatSignComboBox = new javax.swing.JComboBox();
         RuianAdjustLatSpinner = new javax.swing.JSpinner();
@@ -273,20 +271,6 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
 
         RuianConfigPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        RuianUrlCheckBox.setText("Custom Ruian server url");
-        RuianUrlCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RuianUrlCheckBoxActionPerformed(evt);
-            }
-        });
-
-        RuianUrlValueField.setText("https://ags.cuzk.gov.cz/arcgis/rest/services/RUIAN/Prohlizeci_sluzba_nad_daty_RUIAN/MapServer");
-        RuianUrlValueField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RuianUrlValueFieldActionPerformed(evt);
-            }
-        });
-
         RuianAdjustCheckBox.setText("Adjust traced object position");
         RuianAdjustCheckBox.setToolTipText("");
 
@@ -339,22 +323,13 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(RuianAdjustLatSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(RuianAdjustLonSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(RuianUrlCheckBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                        .addGroup(RuianConfigPanelLayout.createSequentialGroup()
-                            .addGap(21, 21, 21)
-                            .addComponent(RuianUrlValueField))))
+                            .addComponent(RuianAdjustLonSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         RuianConfigPanelLayout.setVerticalGroup(
             RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RuianConfigPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(RuianUrlCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RuianUrlValueField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(RuianAdjustCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -430,14 +405,6 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_RuianLonSignComboBoxActionPerformed
 
-    private void RuianUrlValueFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RuianUrlValueFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RuianUrlValueFieldActionPerformed
-
-    private void RuianUrlCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RuianUrlCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RuianUrlCheckBoxActionPerformed
-
     private void TracerLonSignComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TracerLonSignComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TracerLonSignComboBoxActionPerformed
@@ -492,8 +459,6 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
     private javax.swing.JLabel RuianLonLabel;
     private javax.swing.JComboBox RuianLonSignComboBox;
     private javax.swing.JLabel RuianLonZeroLabel;
-    private javax.swing.JCheckBox RuianUrlCheckBox;
-    private javax.swing.JTextField RuianUrlValueField;
     private javax.swing.JCheckBox TracerAdjustCheckBox;
     private javax.swing.JSpinner TracerAdjustLatSpinner;
     private javax.swing.JSpinner TracerAdjustLonSpinner;

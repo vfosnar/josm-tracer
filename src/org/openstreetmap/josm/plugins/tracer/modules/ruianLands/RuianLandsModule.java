@@ -171,9 +171,6 @@ public final class RuianLandsModule extends TracerModule {
         @Override
         protected TracerRecord downloadRecord(LatLon pos) throws Exception {
             TracerPreferences pref = TracerPreferences.getInstance();
-            String sUrl = CuzkRuian.DEFAULT_URL;
-            if (pref.isCustomRuainUrlEnabled())
-              sUrl = pref.getCustomRuainUrl();
 
             // Get coordinate corrections
             double adjlat = 0, adjlon = 0;
@@ -183,7 +180,7 @@ public final class RuianLandsModule extends TracerModule {
             }
 
             RuianLandsServer server = new RuianLandsServer();
-            return server.trace(m_pos, sUrl, adjlat, adjlon);
+            return server.trace(m_pos, CuzkRuian.DEFAULT_URL, adjlat, adjlon);
         }
 
         @Override

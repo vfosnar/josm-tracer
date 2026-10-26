@@ -63,11 +63,7 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
     private String KEY_TRACERADJUSTPOSITIONLATSIGN = "tracer.adjustpositionlatvaluesign";
     private String KEY_TRACERADJUSTPOSITIONLONSIGN = "tracer.adjustpositionlonvaluesign";
 
-    public boolean  m_customRuianUrl;
-    String   m_customRuianUrlText;
 
-    private String KEY_RUIANURL = "tracer.customruianurl";
-    private String KEY_RUIANURLVALUE = "tracer.customurlruianvalue";
 
     boolean  m_ruianAdjustPosition;
     double   m_ruianAdjustPositionLat;
@@ -109,8 +105,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
     private javax.swing.JLabel RuianLonLabel;
     private javax.swing.JComboBox RuianLonSignComboBox;
     private javax.swing.JLabel RuianLonZeroLabel;
-    private javax.swing.JCheckBox RuianUrlCheckBox;
-    private javax.swing.JTextField RuianUrlValueField;
     private javax.swing.JCheckBox TracerAdjustCheckBox;
     private javax.swing.JSpinner TracerAdjustLatSpinner;
     private javax.swing.JSpinner TracerAdjustLonSpinner;
@@ -162,8 +156,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
         m_tracerAdjustPositionLatVal  = Config.getPref().getInt(KEY_TRACERADJUSTPOSITIONLAT, (Integer) TracerAdjustLatSpinner.getValue());
         m_tracerAdjustPositionLonVal  = Config.getPref().getInt(KEY_TRACERADJUSTPOSITIONLON, (Integer) TracerAdjustLonSpinner.getValue());
         // RUIAN
-        m_customRuianUrl             = Config.getPref().getBoolean(KEY_RUIANURL,          RuianUrlCheckBox.isSelected());
-        m_customRuianUrlText         = Config.getPref().get       (KEY_RUIANURLVALUE,     RuianUrlValueField.getText());
         m_ruianAdjustPosition        = Config.getPref().getBoolean(KEY_RUIANADJUSTPOSITION,    RuianAdjustCheckBox.isSelected());
         m_ruianAdjustPositionLatSign = Config.getPref().getInt(KEY_RUIANADJUSTPOSITIONLATSIGN, RuianLatSignComboBox.getSelectedIndex());
         m_ruianAdjustPositionLonSign = Config.getPref().getInt(KEY_RUIANADJUSTPOSITIONLONSIGN, RuianLonSignComboBox.getSelectedIndex());
@@ -182,8 +174,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
         TracerLatSignComboBox.setSelectedIndex(m_tracerAdjustPositionLatSign);
         TracerLonSignComboBox.setSelectedIndex(m_tracerAdjustPositionLonSign);
 
-        RuianUrlCheckBox.setSelected(m_customRuianUrl);
-        RuianUrlValueField.setText(m_customRuianUrlText);
 
         RuianAdjustCheckBox.setSelected(m_ruianAdjustPosition);
         RuianAdjustLatSpinner.setValue(Integer.valueOf(m_ruianAdjustPositionLatVal));
@@ -229,8 +219,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
         TracerAdjustLonSpinner = new javax.swing.JSpinner();
 
         RuianConfigPanel = new javax.swing.JPanel();
-        RuianUrlCheckBox = new javax.swing.JCheckBox();
-        RuianUrlValueField = new javax.swing.JTextField();
         RuianAdjustCheckBox = new javax.swing.JCheckBox();
         RuianLonLabel = new javax.swing.JLabel();
         RuianLatLabel = new javax.swing.JLabel();
@@ -466,17 +454,7 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
         );
 
         // RUIAN settins
-        RuianConfigPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        RuianUrlCheckBox.setText(tr("Custom Ruian server url"));
-        RuianUrlCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                ruianUrlChanged(evt);
-            }
-        });
-
-        RuianUrlValueField.setText(CuzkRuian.DEFAULT_URL);
-        RuianUrlValueField.setEnabled(false);
+        RuianConfigPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), tr("RUIAN")));
 
         RuianAdjustCheckBox.setText(tr("Adjust traced object position"));
         RuianAdjustCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -533,22 +511,13 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(RuianAdjustLatSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(RuianAdjustLonSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(RuianUrlCheckBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                        .addGroup(RuianConfigPanelLayout.createSequentialGroup()
-                            .addGap(21, 21, 21)
-                            .addComponent(RuianUrlValueField))))
+                            .addComponent(RuianAdjustLonSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         RuianConfigPanelLayout.setVerticalGroup(
             RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RuianConfigPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(RuianUrlCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RuianUrlValueField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(RuianAdjustCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(RuianConfigPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -623,10 +592,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
 
     private void tracerUrlChanged(javax.swing.event.ChangeEvent evt) {
         TracerUrlValueField.setEnabled(TracerUrlCheckBox.isSelected());
-    }
-
-    private void ruianUrlChanged(javax.swing.event.ChangeEvent evt) {
-        RuianUrlValueField.setEnabled(RuianUrlCheckBox.isSelected());
     }
 
     private void tracerAdjustChanged(javax.swing.event.ChangeEvent evt) {
@@ -807,22 +772,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
     }
 
     /**
-     *  Return whether custom Ruian url is enabled
-     *  @return True if custom Ruian url is enabled
-     */
-    public boolean isCustomRuainUrlEnabled() {
-      return m_customRuianUrl;
-    }
-
-    /**
-     *  Return custom Ruian url
-     *  @return Custom Ruian url
-     */
-    public String getCustomRuainUrl() {
-      return m_customRuianUrlText;
-    }
-
-    /**
      *  Return whether Classic Tracer adjust position is enabled
      *  @return True if Classic Tracer adjust position is enabled
      */
@@ -914,12 +863,6 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
         Config.getPref().putInt(KEY_TRACERADJUSTPOSITIONLONSIGN, m_tracerAdjustPositionLonSign);
 
         // RUIAN
-        m_customRuianUrl = RuianUrlCheckBox.isSelected();
-        Config.getPref().putBoolean(KEY_RUIANURL, m_customRuianUrl);
-
-        m_customRuianUrlText = RuianUrlValueField.getText();
-        Config.getPref().put(KEY_RUIANURLVALUE, m_customRuianUrlText);
-
         m_ruianAdjustPosition = RuianAdjustCheckBox.isSelected();
         Config.getPref().putBoolean(KEY_RUIANADJUSTPOSITION, m_ruianAdjustPosition);
 
