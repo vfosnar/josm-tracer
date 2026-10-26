@@ -158,7 +158,7 @@ public final class RuianLandsRecord extends TracerRecord {
         long kind = CuzkRuian.number(attrs, "druhpozemkukod");
         long use = CuzkRuian.number(attrs, "zpusobyvyuzitipozemku");
         if (!mapKeys(kind, use))
-            throw new IOException(tr("RUIAN parcel {0} (land type {1}, use {2}) has no OSM tagging", m_ruian_id, kind, use));
+            throw new IOException(tr("RUIAN parcel {0} (land type {1}, use {2}) has no OSM tagging", Long.toString(m_ruian_id), kind, use));
         m_keys.put("source", m_source);
 
         super.setOuter(CuzkRuian.partAt(feature.getJsonObject("geometry"), pos).outer);
