@@ -66,7 +66,17 @@ The plugin is named `Tracer-cuzk` so it never shares a name with the official li
 
 ## Install (JOSM)
 
-1. Preferences (F12) → Plugins → "Configure sites..." → "Add" →
-   `https://s.vfosnar.cz/josm/plugins.txt` → OK.
-2. "Download list", untick `Tracer-testing` if it is ticked, tick `Tracer-cuzk`, OK, restart JOSM.
-3. More tools → Tracer (or `T`), click inside a building.
+Checked 2026-10-26 on JOSM 19613 starting from an installed `Tracer-testing`, in English and Czech
+(Czech labels in brackets). The friend-facing page with the same steps is `tools/site/index.html`.
+
+1. Preferences (Předvolby, F12) → Plugins (Doplňky). Tick Expert Mode (Režim pro experty), bottom
+   left: "Configure sites..." (Nastavit zdroje...) only shows in expert mode.
+2. Configure sites → Add (Přidat) → `https://s.vfosnar.cz/josm/plugins.txt` → OK → OK.
+3. Download list (Stáhnout seznam), search `tracer`, tick `Tracer-cuzk`, untick `Tracer-testing`,
+   OK, Restart (Restartovat).
+4. More tools → Tracer (Další nástroje → Trasovač) or `T`, click inside a building.
+
+The enabled-module list (`tracer.modulesenabled`) is shared with Tracer-testing, so a former
+Tracer-testing user traces at once. With an empty list Tracer refuses to start ("No active module
+found"): Tracer plugin settings (Konfigurace Trasovače) → move `ruian` to Enabled modules → OK →
+restart JOSM. In the test, tracing did not start until that restart.

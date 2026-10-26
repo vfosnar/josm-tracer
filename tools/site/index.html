@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracer-cuzk pro JOSM</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
+  code { background: #f1f1f1; padding: 0.1rem 0.3rem; border-radius: 3px; word-break: break-all; }
+  li { margin-bottom: 0.5rem; }
+  h2 { margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>Tracer-cuzk pro JOSM</h1>
+<p>Tracer, který bere budovy a parcely z RÚIAN přímo od ČÚZK, ne přes poloha.net. Nahrazuje plugin Tracer-testing. Ovládá se stejně jako dřív.</p>
+
+<h2>Instalace</h2>
+<ol>
+  <li>V JOSM otevři <strong>Předvolby</strong> (<code>F12</code>) a vlevo vyber <strong>Doplňky</strong>.</li>
+  <li>Vlevo dole zaškrtni <strong>Režim pro experty</strong>. Teprve potom se dole objeví tlačítko <strong>Nastavit zdroje…</strong></li>
+  <li>Klikni na <strong>Nastavit zdroje…</strong> → <strong>Přidat</strong>, vlož <code>https://s.vfosnar.cz/josm/plugins.txt</code>, potvrď <strong>OK</strong> a v seznamu zdrojů znovu <strong>OK</strong>.</li>
+  <li>Klikni na <strong>Stáhnout seznam</strong> a do vyhledávání napiš <code>tracer</code>.</li>
+  <li>Zaškrtni <strong>Tracer-cuzk</strong> a odškrtni <strong>Tracer-testing</strong>. Oba naráz zapnuté být nesmí.</li>
+  <li><strong>OK</strong>, a až se JOSM zeptá, <strong>Restartovat</strong>.</li>
+</ol>
+<p>Trasuje se jako dřív: <strong>Další nástroje → Trasovač</strong> nebo klávesa <code>T</code>, pak klik do budovy.</p>
+<p>Kdo Tracer-testing používal, má moduly nastavené a nic dalšího nedělá. Kdo ne a Trasovač se nezapne: <strong>Předvolby → Konfigurace Trasovače</strong>, přesuň <code>ruian</code> do Enabled modules tlačítkem <code>&gt;&gt;</code>, <strong>OK</strong> a restartuj JOSM.</p>
+
+<h2>Odkud jsou data</h2>
+<ul>
+  <li>Budovy a parcely: RÚIAN mapová služba ČÚZK, jeden dotaz na klik.</li>
+  <li>LPIS: služba Ministerstva zemědělství, beze změny.</li>
+</ul>
+<p>Aktualizace přicházejí přes běžnou aktualizaci pluginů v JOSM. Zdrojový kód: <a href="Tracer-cuzk-src.tar.gz">Tracer-cuzk-src.tar.gz</a> (GPL, vychází z <a href="https://github.com/mkyral/josm-tracer">mkyral/josm-tracer</a>).</p>
+</body>
+</html>

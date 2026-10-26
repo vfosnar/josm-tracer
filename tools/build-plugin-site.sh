@@ -34,6 +34,7 @@ MF
 LC_ALL=C awk '{s=$0; print substr(s,1,72); s=substr(s,73); while (length(s)>0) {print " " substr(s,1,71); s=substr(s,72)}}' \
   "$work/manifest.long" > "$work/MANIFEST.MF"
 jar cfm "$out/Tracer-cuzk.jar" "$work/MANIFEST.MF" -C "$work/classes" .
+cp "$repo/tools/site/index.html" "$out/index.html"
 git -C "$repo" archive --format=tar.gz --prefix=josm-tracer-cuzk/ -o "$out/Tracer-cuzk-src.tar.gz" HEAD
 
 # JOSM plugin list: "<file>;<url>" then the jar's manifest, each line tab-indented
