@@ -68,9 +68,8 @@ public final class RuianLandsRecord extends TracerRecord {
           m_keys.put("crop", "hop"); return true;
         case 4: // vinice
           m_keys.put("landuse", "vineyard"); return true;
-        case 5: // zahrada
-          m_keys.put("leisure", "garden");
-          m_keys.put("garden:type", "residential"); return true;
+        case 5: // zahrada: RUIAN gardens do not match gardens on the ground, so none are traced
+          return false;
         case 6: // ovocný sad
           m_keys.put("landuse", "orchard"); return true;
         case 7: case 8: // trvalý travní porost

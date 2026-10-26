@@ -49,8 +49,9 @@ Addresses were fetched by the old code but never tagged, so they are not fetched
   -1578009600000, VDP shows "Datum dokončení: 31.12.1919", and the plugin writes `1919-12-31`.
 - **RUIAN Lands keys** come from the mapping left commented out in `RuianLandsRecord`, keyed
   by ČÚZK codes (`druhpozemkukod`, `zpusobyvyuzitipozemku`); poloha.net's `ruian.landuse_view`
-  was never published either. Two fixes: `orchard=orchard` → `landuse=orchard`,
-  `garden:type=residental` → `residential`. The rest is as the author wrote it, including
+  was never published either. Changes: `orchard=orchard` → `landuse=orchard`, and gardens
+  (zahrada, code 5) get no tagging, so tracing one reports an error: RUIAN gardens do not match
+  gardens on the ground (@vfosnar 2026-10-26). The rest is as the author wrote it, including
   `landuse=river`, `landuse=highway` and `landuse=common` for greenhouses. A parcel type with no
   mapping is reported as an error naming the parcel and both codes.
 
