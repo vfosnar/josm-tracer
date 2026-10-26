@@ -23,6 +23,8 @@ Currently, following modules are available:
 
 On plugin configuration page you can activate only modules you want to use.
 
+This branch reads RUIAN from ČÚZK directly; sources, tag mapping and install: [doc/cuzk-direct.md](doc/cuzk-direct.md).
+
 ## Work with Tracer
 Tracer tool is available in menu ```More tools/Tracer - RUIAN``` and under key ```T``` When activated, tracer will initialize last used module. By pressing key ```T``` you can switch to next enabled module. Activated module is indicated on cursor.
 

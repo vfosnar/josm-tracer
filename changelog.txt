@@ -8,3 +8,4 @@ Changelog
 - Add an option to adjust traced object position [Marian Kyral]
 - Server URL could be changed [Marian Kyral]
 - Used building type from RUIAN and RUIAN ID is added [Marian Kyral]
+- RUIAN and RUIAN Lands read directly from the ČÚZK RÚIAN service instead of poloha.net; custom RUIAN server URL removed
