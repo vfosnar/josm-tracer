@@ -21,6 +21,7 @@ package org.openstreetmap.josm.plugins.tracer.modules.ruian;
 import java.awt.Cursor;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.tracer.modules.building.BuildingTracerModule;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerPreferences;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
 
@@ -32,7 +33,6 @@ public final class RuianModule extends BuildingTracerModule {
     protected boolean cancel;
     private boolean moduleEnabled;
 
-    private final String ruianUrl = "http://josm.poloha.net";
 
     public RuianModule(boolean enabled) {
         moduleEnabled = enabled;
@@ -87,7 +87,7 @@ public final class RuianModule extends BuildingTracerModule {
         @Override
         protected TracerRecord downloadRecord(LatLon pos) throws Exception {
             TracerPreferences pref = TracerPreferences.getInstance();
-            String sUrl = ruianUrl;
+            String sUrl = CuzkRuian.DEFAULT_URL;
             if (pref.isCustomRuainUrlEnabled())
               sUrl = pref.getCustomRuainUrl();
 

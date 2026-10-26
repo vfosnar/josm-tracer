@@ -26,6 +26,7 @@ import org.openstreetmap.josm.data.osm.search.SearchCompiler;
 import org.openstreetmap.josm.data.osm.search.SearchCompiler.Match;
 import org.openstreetmap.josm.data.osm.search.SearchParseError;
 import org.openstreetmap.josm.plugins.tracer.TracerModule;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerPreferences;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
 import org.openstreetmap.josm.plugins.tracer.connectways.*;
@@ -43,7 +44,6 @@ public final class RuianLandsModule extends TracerModule {
 
     private static final double oversizeInDataBoundsMeters = 5.0;
 
-    private static final String RuianLandsUrl = "http://josm.poloha.net";
 
     private static final String reuseExistingLanduseNodePattern =
         "((landuse=* -landuse=no -landuse=military) | natural=scrub | natural=wood | natural=grassland | leisure=garden)";
@@ -171,7 +171,7 @@ public final class RuianLandsModule extends TracerModule {
         @Override
         protected TracerRecord downloadRecord(LatLon pos) throws Exception {
             TracerPreferences pref = TracerPreferences.getInstance();
-            String sUrl = RuianLandsUrl;
+            String sUrl = CuzkRuian.DEFAULT_URL;
             if (pref.isCustomRuainUrlEnabled())
               sUrl = pref.getCustomRuainUrl();
 

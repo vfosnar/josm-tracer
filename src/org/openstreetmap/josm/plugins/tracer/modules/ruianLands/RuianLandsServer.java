@@ -19,45 +19,26 @@
 
 package org.openstreetmap.josm.plugins.tracer.modules.ruianLands;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import jakarta.json.JsonObject;
 import org.openstreetmap.josm.data.coor.LatLon;
-import org.openstreetmap.josm.plugins.tracer.TracerUtils;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 
 
 public class RuianLandsServer {
+
+    private static final String FIELDS = "id,druhpozemkukod,zpusobyvyuzitipozemku";
 
     public RuianLandsServer() {
 
     }
 
-    /**
-     * Call Trace server.
-     * @param urlString Input parameters.
-     * @return Result text.
-     * @throws java.net.MalformedURLException Wrong url
-     * @throws java.io.IOException Input/Output issue
-     */
-    private String callServer(String urlString) throws MalformedURLException, IOException {
-        try (BufferedReader reader = TracerUtils.openUrlStream (urlString)) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (sb.length() > 0)
-                    sb.append(" ");
-                sb.append(line);
-            }
-            return sb.toString();
-        }
-    }
-
     public RuianLandsRecord trace(LatLon pos, String url, double adjlat, double adjlon) throws IOException {
-        System.out.println("Request: "+ url + "/ruian-lands/beta/?lat=" + pos.lat() + "&lon=" + pos.lon());
-        String content = callServer(url + "/ruian-lands/beta/?lat=" + pos.lat() + "&lon=" + pos.lon());
-        System.out.println("Reply: " + content);
         RuianLandsRecord ruian = new RuianLandsRecord(adjlat, adjlon);
-        ruian.parseJSON(content);
+        JsonObject feature = CuzkRuian.featureAt(url, CuzkRuian.LAYER_PARCEL, pos, FIELDS);
+        System.out.println("Reply: " + feature);
+        if (feature != null)
+            ruian.parseCuzk(feature, pos);
         return ruian;
     }
 }

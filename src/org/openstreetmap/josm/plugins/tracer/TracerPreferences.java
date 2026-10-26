@@ -475,7 +475,7 @@ public class TracerPreferences extends DefaultTabPreferenceSetting {
             }
         });
 
-        RuianUrlValueField.setText("http://josm.poloha.net/");
+        RuianUrlValueField.setText(CuzkRuian.DEFAULT_URL);
         RuianUrlValueField.setEnabled(false);
 
         RuianAdjustCheckBox.setText(tr("Adjust traced object position"));

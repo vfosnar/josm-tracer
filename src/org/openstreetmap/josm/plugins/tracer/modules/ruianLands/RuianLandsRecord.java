@@ -18,14 +18,13 @@
 
 package org.openstreetmap.josm.plugins.tracer.modules.ruianLands;
 
-import java.io.ByteArrayInputStream;
+import static org.openstreetmap.josm.tools.I18n.tr;
 
+import java.io.IOException;
 import java.util.*;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
 
 
@@ -56,215 +55,114 @@ public final class RuianLandsRecord extends TracerRecord {
     }
 
     /**
-    * Map RUIAN usage values to OSM landuse or
-    * natural or leisure key
-    *
-    */
-    /*
-    private void mapKeys () {
-      if (m_druh_pozemku.equals("orná půda")){
-        m_keys.put("landuse", "farmland");
+     * Map RUIAN parcel kind (SC_D_POZEMKU) and use (SC_ZP_VYUZITI_POZ) codes to OSM keys
+     *
+     * @return False when the combination has no OSM tagging
+     */
+    private boolean mapKeys (long kind, long use) {
+      switch ((int) kind) {
+        case 2: // orná půda
+          m_keys.put("landuse", "farmland"); return true;
+        case 3: // chmelnice
+          m_keys.put("landuse", "farmland");
+          m_keys.put("crop", "hop"); return true;
+        case 4: // vinice
+          m_keys.put("landuse", "vineyard"); return true;
+        case 5: // zahrada
+          m_keys.put("leisure", "garden");
+          m_keys.put("garden:type", "residential"); return true;
+        case 6: // ovocný sad
+          m_keys.put("landuse", "orchard"); return true;
+        case 7: case 8: // trvalý travní porost
+          m_keys.put("landuse", "meadow");
+          m_keys.put("meadow", "agricultural"); return true;
+        case 10: // lesní pozemek
+          m_keys.put("landuse", "forest"); return true;
+        case 13: // zastavěná plocha a nádvoří
+          m_keys.put("building", "yes"); return true;
+        case 11: case 14: // vodní plocha, ostatní plocha
+          break;
+        default:
+          return false;
+      }
 
-      } else if (m_druh_pozemku.equals("chmelnice")){
-        m_keys.put("landuse", "farmland");
-        m_keys.put("crop", "hop");
-
-      } else if (m_druh_pozemku.equals("vinice")){
-        m_keys.put("landuse", "vineyard");
-
-      } else if (m_druh_pozemku.equals("ovocný sad")){
-        m_keys.put("orchard", "orchard");
-
-      } else if (m_druh_pozemku.equals("trvalý travní porost")){
-        m_keys.put("landuse", "meadow");
-        m_keys.put("meadow", "agricultural");
-
-      } else if (m_druh_pozemku.equals("lesní pozemek")){
-        m_keys.put("landuse", "forest");
-
-      } else if (m_druh_pozemku.equals("zahrada")) {
-        m_keys.put("leisure", "garden");
-        m_keys.put("garden:type", "residental");
-
-      } else if (m_druh_pozemku.equals("zastavěná plocha a nádvoří")){
-        m_keys.put("building", "yes");
-
-      } else if (m_druh_pozemku.equals("ostatní plocha") ||
-                 m_druh_pozemku.equals("vodní plocha")) {
-        if (m_zpusob_vyuziti.equals("skleník, pařeniště")) {
-          m_keys.put("landuse", "common");
-        }
-
-        else if (m_zpusob_vyuziti.equals("školka")) {
-          m_keys.put("landuse", "plant_nursery");
-        }
-
-        else if (m_zpusob_vyuziti.equals("plantáž dřevin")) {
+      switch ((int) use) {
+        case 1: // skleník, pařeniště
+          m_keys.put("landuse", "common"); return true;
+        case 2: // školka
+          m_keys.put("landuse", "plant_nursery"); return true;
+        case 3: // plantáž dřevin
           m_keys.put("natural", "wood");
-          m_keys.put("crop", "fast_growing_wood");
-        }
-
-        else if (m_zpusob_vyuziti.equals("les jiný než hospodářský")) {
-          m_keys.put("natural", "wood");
-        }
-
-        else if (m_zpusob_vyuziti.equals("lesní pozemek, na kterém je budova")) {
-          m_keys.put("landuse", "forest");
-        }
-
-        else if (m_zpusob_vyuziti.equals("rybník")) {
+          m_keys.put("crop", "fast_growing_wood"); return true;
+        case 4: // les jiný než hospodářský
+          m_keys.put("natural", "wood"); return true;
+        case 5: // lesní pozemek, na kterém je budova
+          m_keys.put("landuse", "forest"); return true;
+        case 6: // rybník
           m_keys.put("natural", "water");
-          m_keys.put("water", "pond");
-        }
-
-        else if (m_zpusob_vyuziti.equals("koryto vodního toku přirozené nebo upravené")) {
-          m_keys.put("landuse", "river");
-        }
-
-        else if (m_zpusob_vyuziti.equals("koryto vodního toku umělé")) {
-          m_keys.put("landuse", "river");
-        }
-
-        else if (m_zpusob_vyuziti.equals("vodní nádrž přírodní")) {
+          m_keys.put("water", "pond"); return true;
+        case 7: case 8: // koryto vodního toku
+          m_keys.put("landuse", "river"); return true;
+        case 9: // vodní nádrž přírodní
           m_keys.put("natural", "water");
-          m_keys.put("water", "lake");
-        }
-
-        else if (m_zpusob_vyuziti.equals("vodní nádrž umělá")) {
+          m_keys.put("water", "lake"); return true;
+        case 10: // vodní nádrž umělá
           m_keys.put("natural", "water");
-          m_keys.put("water", "reservoir");
-        }
-
-        else if (m_zpusob_vyuziti.equals("zamokřená plocha")) {
-          m_keys.put("natural", "wetland");
-        }
-
-        else if (m_zpusob_vyuziti.equals("společný dvůr")) {
-          m_keys.put("", "");
-        }
-
-        else if (m_zpusob_vyuziti.equals("zbořeniště")) {
-          m_keys.put("landuse", "brownfield");
-        }
-
-        else if (m_zpusob_vyuziti.equals("dráha")) {
-          m_keys.put("landuse", "railway");
-        }
-
-        else if (m_zpusob_vyuziti.equals("dálnice")) {
-          m_keys.put("landuse", "highway");
-        }
-
-        else if (m_zpusob_vyuziti.equals("silnice")) {
-          m_keys.put("landuse", "highway");
-        }
-
-        else if (m_zpusob_vyuziti.equals("ostatní komunikace")) {
-          m_keys.put("landuse", "highway");
-        }
-
-        else if (m_zpusob_vyuziti.equals("ostatní dopravní plocha")) {
-//           m_keys.put("", "");
-        }
-
-        else if (m_zpusob_vyuziti.equals("zeleň")) {
-          m_keys.put("leisure", "common");
-        }
-
-        else if (m_zpusob_vyuziti.equals("sportoviště a rekreační plocha")) {
-          m_keys.put("landuse", "recreation_ground");
-        }
-
-        else if (m_zpusob_vyuziti.equals("hřbitov, urnový háj")) {
-          m_keys.put("landuse", "cemetery");
-        }
-
-        else if (m_zpusob_vyuziti.equals("kulturní a osvětová plocha")) {
-//           m_keys.put("", "");
-        }
-
-        else if (m_zpusob_vyuziti.equals("manipulační plocha")) {
+          m_keys.put("water", "reservoir"); return true;
+        case 11: // zamokřená plocha
+          m_keys.put("natural", "wetland"); return true;
+        case 13: // zbořeniště
+          m_keys.put("landuse", "brownfield"); return true;
+        case 14: // dráha
+          m_keys.put("landuse", "railway"); return true;
+        case 15: case 16: case 17: // dálnice, silnice, ostatní komunikace
+          m_keys.put("landuse", "highway"); return true;
+        case 19: // zeleň
+          m_keys.put("leisure", "common"); return true;
+        case 20: // sportoviště a rekreační plocha
+          m_keys.put("landuse", "recreation_ground"); return true;
+        case 21: // pohřebiště
+          m_keys.put("landuse", "cemetery"); return true;
+        case 23: // manipulační plocha
           m_keys.put("highway", "service");
-          m_keys.put("area", "yes");
-        }
-
-        else if (m_zpusob_vyuziti.equals("dobývací prostor")) {
-          m_keys.put("landuse", "quarry");
-        }
-
-        else if (m_zpusob_vyuziti.equals("skládka")) {
-          m_keys.put("landuse", "landfill");
-        }
-
-        else if (m_zpusob_vyuziti.equals("jiná plocha")) {
-//           m_keys.put("", "");
-        }
-
-        else if (m_zpusob_vyuziti.equals("neplodná půda")) {
-//           m_keys.put("", "");
-        }
-
-        else if (m_zpusob_vyuziti.equals("vodní plocha, na které je budova")) {
-          m_keys.put("natural", "water");
-        }
-
-        else if (m_zpusob_vyuziti.equals("fotovoltaická elektrárna")) {
+          m_keys.put("area", "yes"); return true;
+        case 24: // dobývací prostor
+          m_keys.put("landuse", "quarry"); return true;
+        case 25: // skládka
+          m_keys.put("landuse", "landfill"); return true;
+        case 28: // vodní plocha, na které je budova
+          m_keys.put("natural", "water"); return true;
+        case 29: // fotovoltaická elektrárna
           m_keys.put("power", "generator");
           m_keys.put("generator:source", "solar");
           m_keys.put("generator:output:electricity", "yes");
-          m_keys.put("generator:method", "photovoltaic");
-        } else {
-          System.out.println("Unsuported values combination: " + m_druh_pozemku + "/" + m_zpusob_vyuziti);
-        }
-}
-    }*/
+          m_keys.put("generator:method", "photovoltaic"); return true;
+        default: // 12 společný dvůr, 18, 22, 26, 27, 30 and unset
+          return false;
+      }
+    }
 
     /**
-     * Parse given JSON string and fill variables with RUIAN data
+     * Fill record from a Parcela feature of the ČÚZK RÚIAN service
      *
-     * @param jsonStr JSON string with RUIAN data
+     * @param feature Feature with attributes and geometry
+     * @param pos Traced position
+     * @throws IOException Geometry without outer ring, or a parcel type without OSM tagging
      */
-    public void parseJSON(String jsonStr) {
+    public void parseCuzk(JsonObject feature, LatLon pos) throws IOException {
 
         init();
+        m_source = "cuzk:ruian";
 
-        JsonObject obj;
-        try (JsonReader jsonReader = Json.createReader(new ByteArrayInputStream(jsonStr.getBytes()))) {
-            obj = jsonReader.readObject();
-        }
+        JsonObject attrs = feature.getJsonObject("attributes");
+        m_ruian_id = CuzkRuian.number(attrs, "id");
+        long kind = CuzkRuian.number(attrs, "druhpozemkukod");
+        long use = CuzkRuian.number(attrs, "zpusobyvyuzitipozemku");
+        if (!mapKeys(kind, use))
+            throw new IOException(tr("RUIAN parcel {0} (land type {1}, use {2}) has no OSM tagging", m_ruian_id, kind, use));
+        m_keys.put("source", m_source);
 
-        m_source = obj.getString("source");
-        if (m_source.length() == 0)
-            m_source = "cuzk:ruian";
-
-        String keys = retrieveJsonString(obj, "keys");
-        if (keys != null) {
-            String[] kv = keys.replace("\"", "").replace(",{", "").replace("{", "").replace("}}", "}").split("}");
-            System.out.println("keys: " + Arrays.toString(kv));
-            for (int i = 0; i < kv.length; i++) {
-                System.out.println("key[" + i + "]: " + kv[i]);
-                String[] x = kv[i].split(",");
-                m_keys.put(x[0], x[1]);
-            }
-            m_keys.put("source", m_source);
-        }
-
-        JsonArray arr = retrieveJsonArray(obj, "geometry");
-        if (arr != null && arr.size() > 0) {
-            List<LatLon> way = new ArrayList<>(arr.size());
-            for (int i = 0; i < arr.size(); i++) {
-                System.out.println("i=" + i);
-                JsonArray node = arr.getJsonArray(i);
-
-                LatLon coor = new LatLon(
-                        node.getJsonNumber(1).doubleValue(),
-                        node.getJsonNumber(0).doubleValue()
-                );
-                System.out.println("coor: " + coor.toString());
-                way.add(coor);
-            }
-            super.setOuter(way);
-        }
+        super.setOuter(CuzkRuian.partAt(feature.getJsonObject("geometry"), pos).outer);
     }
 
     /**

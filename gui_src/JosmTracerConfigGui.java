@@ -280,7 +280,7 @@ public class JosmTracerConfigGui extends javax.swing.JPanel {
             }
         });
 
-        RuianUrlValueField.setText("http://josm.poloha.net/");
+        RuianUrlValueField.setText("https://ags.cuzk.gov.cz/arcgis/rest/services/RUIAN/Prohlizeci_sluzba_nad_daty_RUIAN/MapServer");
         RuianUrlValueField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RuianUrlValueFieldActionPerformed(evt);
