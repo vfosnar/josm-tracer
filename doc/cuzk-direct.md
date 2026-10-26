@@ -73,6 +73,9 @@ Checked 2026-10-26 on JOSM 19613 starting from an installed `Tracer-testing`, in
 1. Preferences (Předvolby, F12) → Plugins (Doplňky). Tick Expert Mode (Režim pro experty), bottom
    left: "Configure sites..." (Nastavit zdroje...) only shows in expert mode.
 2. Configure sites → Add (Přidat) → `https://s.vfosnar.cz/josm/plugins.txt` → OK → OK.
+   "Configure sites..." is the bottom-right button of the Plugins page. A tester first clicked
+   Add in Advanced Preferences (Nastavení pro pokročilé), so the page shows annotated screenshots
+   (`tools/site/*.png`, from the 2026-10-26 Czech test run).
 3. Download list (Stáhnout seznam), search `tracer`, tick `Tracer-cuzk`, untick `Tracer-testing`,
    OK, Restart (Restartovat).
 4. More tools → Tracer (Další nástroje → Trasovač) or `T`, click inside a building.
