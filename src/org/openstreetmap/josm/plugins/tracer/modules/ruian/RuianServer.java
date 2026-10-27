@@ -22,10 +22,14 @@ package org.openstreetmap.josm.plugins.tracer.modules.ruian;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import jakarta.json.JsonObject;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerUtils;
 
 public final class RuianServer {
+
+    private static final String CUZK_FIELDS = "kod,zpusobvyuzitikod,pocetpodlazi,pocetbytu,dokonceni";
 
     public RuianServer() {
     }
@@ -69,6 +73,25 @@ public final class RuianServer {
         System.out.println("Reply: " + content);
         RuianRecord ruian = new RuianRecord(adjlat, adjlon);
         ruian.parseJSON(content);
+        return ruian;
+    }
+
+    /**
+     * Trace building on given position from the ČÚZK RÚIAN service.
+     *
+     * @param pos Position of building.
+     * @param url Url of the ČÚZK RÚIAN MapServer
+     * @param adjlat Latitude correction to be applied to building geometry.
+     * @param adjlon Longitude correction to be applied to building geometry.
+     * @return Building data.
+     * @throws java.io.IOException Input/Output issue
+     */
+    public RuianRecord traceCuzk(LatLon pos, String url, double adjlat, double adjlon) throws IOException {
+        RuianRecord ruian = new RuianRecord(adjlat, adjlon);
+        JsonObject feature = CuzkRuian.featureAt(url, CuzkRuian.LAYER_BUILDING, pos, CUZK_FIELDS);
+        System.out.println("Reply: " + feature);
+        if (feature != null)
+            ruian.parseCuzk(feature, pos);
         return ruian;
     }
 }

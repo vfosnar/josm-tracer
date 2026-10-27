@@ -22,11 +22,15 @@ package org.openstreetmap.josm.plugins.tracer.modules.ruianLands;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import jakarta.json.JsonObject;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerUtils;
 
 
 public class RuianLandsServer {
+
+    private static final String CUZK_FIELDS = "id,druhpozemkukod,zpusobyvyuzitipozemku";
 
     public RuianLandsServer() {
 
@@ -58,6 +62,15 @@ public class RuianLandsServer {
         System.out.println("Reply: " + content);
         RuianLandsRecord ruian = new RuianLandsRecord(adjlat, adjlon);
         ruian.parseJSON(content);
+        return ruian;
+    }
+
+    public RuianLandsRecord traceCuzk(LatLon pos, String url, double adjlat, double adjlon) throws IOException {
+        RuianLandsRecord ruian = new RuianLandsRecord(adjlat, adjlon);
+        JsonObject feature = CuzkRuian.featureAt(url, CuzkRuian.LAYER_PARCEL, pos, CUZK_FIELDS);
+        System.out.println("Reply: " + feature);
+        if (feature != null)
+            ruian.parseCuzk(feature, pos);
         return ruian;
     }
 }

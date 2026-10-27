@@ -21,6 +21,8 @@ package org.openstreetmap.josm.plugins.tracer.modules.ruian;
 import java.awt.Cursor;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.tracer.modules.building.BuildingTracerModule;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
+import org.openstreetmap.josm.plugins.tracer.RuianSource;
 import org.openstreetmap.josm.plugins.tracer.TracerPreferences;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
 
@@ -33,9 +35,15 @@ public final class RuianModule extends BuildingTracerModule {
     private boolean moduleEnabled;
 
     private final String ruianUrl = "http://josm.poloha.net";
+    private final RuianSource m_source;
 
     public RuianModule(boolean enabled) {
+        this(enabled, RuianSource.POLOHA_NET);
+    }
+
+    public RuianModule(boolean enabled, RuianSource source) {
         moduleEnabled = enabled;
+        m_source = source;
     }
 
     @Override
@@ -60,7 +68,7 @@ public final class RuianModule extends BuildingTracerModule {
 
     @Override
     public String getName() {
-        return tr("RUIAN");
+        return m_source == RuianSource.CUZK ? tr("RUIAN-ČÚZK") : tr("RUIAN");
     }
 
     @Override
@@ -87,9 +95,6 @@ public final class RuianModule extends BuildingTracerModule {
         @Override
         protected TracerRecord downloadRecord(LatLon pos) throws Exception {
             TracerPreferences pref = TracerPreferences.getInstance();
-            String sUrl = ruianUrl;
-            if (pref.isCustomRuainUrlEnabled())
-              sUrl = pref.getCustomRuainUrl();
 
             // Get coordinate corrections
             double adjlat = 0, adjlon = 0;
@@ -99,6 +104,12 @@ public final class RuianModule extends BuildingTracerModule {
             }
 
             RuianServer server = new RuianServer();
+            if (m_source == RuianSource.CUZK)
+              return server.traceCuzk(m_pos, CuzkRuian.DEFAULT_URL, adjlat, adjlon);
+
+            String sUrl = ruianUrl;
+            if (pref.isCustomRuainUrlEnabled())
+              sUrl = pref.getCustomRuainUrl();
             return server.trace(m_pos, sUrl, adjlat, adjlon);
         }
     }

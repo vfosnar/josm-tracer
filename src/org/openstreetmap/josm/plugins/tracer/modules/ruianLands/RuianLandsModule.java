@@ -25,6 +25,8 @@ import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.data.osm.search.SearchCompiler;
 import org.openstreetmap.josm.data.osm.search.SearchCompiler.Match;
 import org.openstreetmap.josm.data.osm.search.SearchParseError;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
+import org.openstreetmap.josm.plugins.tracer.RuianSource;
 import org.openstreetmap.josm.plugins.tracer.TracerModule;
 import org.openstreetmap.josm.plugins.tracer.TracerPreferences;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
@@ -40,6 +42,7 @@ public final class RuianLandsModule extends TracerModule {
 
     protected boolean cancel;
     private boolean moduleEnabled;
+    private final RuianSource m_source;
 
     private static final double oversizeInDataBoundsMeters = 5.0;
 
@@ -106,7 +109,12 @@ public final class RuianLandsModule extends TracerModule {
 
 
     public RuianLandsModule(boolean enabled) {
+      this(enabled, RuianSource.POLOHA_NET);
+    }
+
+    public RuianLandsModule(boolean enabled, RuianSource source) {
       moduleEnabled = enabled;
+      m_source = source;
     }
 
     @Override
@@ -134,7 +142,7 @@ public final class RuianLandsModule extends TracerModule {
 
     @Override
     public String getName() {
-        return tr("RUIAN-Lands");
+        return m_source == RuianSource.CUZK ? tr("RUIAN-Lands-ČÚZK") : tr("RUIAN-Lands");
     }
 
     @Override
@@ -171,9 +179,6 @@ public final class RuianLandsModule extends TracerModule {
         @Override
         protected TracerRecord downloadRecord(LatLon pos) throws Exception {
             TracerPreferences pref = TracerPreferences.getInstance();
-            String sUrl = RuianLandsUrl;
-            if (pref.isCustomRuainUrlEnabled())
-              sUrl = pref.getCustomRuainUrl();
 
             // Get coordinate corrections
             double adjlat = 0, adjlon = 0;
@@ -183,6 +188,12 @@ public final class RuianLandsModule extends TracerModule {
             }
 
             RuianLandsServer server = new RuianLandsServer();
+            if (m_source == RuianSource.CUZK)
+              return server.traceCuzk(m_pos, CuzkRuian.DEFAULT_URL, adjlat, adjlon);
+
+            String sUrl = RuianLandsUrl;
+            if (pref.isCustomRuainUrlEnabled())
+              sUrl = pref.getCustomRuainUrl();
             return server.trace(m_pos, sUrl, adjlat, adjlon);
         }
 

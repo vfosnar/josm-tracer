@@ -19,12 +19,14 @@
 package org.openstreetmap.josm.plugins.tracer.modules.ruian;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.*;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.plugins.tracer.CuzkRuian;
 import org.openstreetmap.josm.plugins.tracer.TracerRecord;
 import org.openstreetmap.josm.plugins.tracer.TracerUtils;
 
@@ -47,6 +49,17 @@ public final class RuianRecord extends TracerRecord {
     private String   m_valid_from;
 
     private ArrayList <Address> m_address_places;
+
+    /** building=* per SC_ZP_VYUZITI_BUD code as poloha.net tagged it: wiki Cs:RÚIAN, column "Současný stav dle Petra" */
+    private static final Map<Integer, String> BUILDING_BY_USAGE = Map.ofEntries(
+        Map.entry(1, "industrial"), Map.entry(2, "farm_auxiliary"), Map.entry(3, "residential"),
+        Map.entry(4, "yes"), Map.entry(5, "civic"), Map.entry(6, "residential"),
+        Map.entry(7, "house"), Map.entry(8, "yes"), Map.entry(9, "civic"),
+        Map.entry(10, "commercial"), Map.entry(11, "hotel"), Map.entry(12, "warehouse"),
+        Map.entry(13, "barn"), Map.entry(14, "commercial"), Map.entry(15, "civic"),
+        Map.entry(16, "industrial"), Map.entry(17, "transportation"), Map.entry(18, "garage"),
+        Map.entry(19, "yes"), Map.entry(20, "yes"), Map.entry(21, "greenhouse"),
+        Map.entry(27, "transportation"), Map.entry(28, "industrial"), Map.entry(29, "yes"));
 
     public RuianRecord (double adjlat, double adjlon) {
         super (adjlat, adjlon);
@@ -158,7 +171,7 @@ public final class RuianRecord extends TracerRecord {
             m_usage_key = parseJsonString(building, "zpusob_vyuziti_key", m_usage_key);
             m_usage_val = parseJsonString(building, "zpusob_vyuziti_val", m_usage_val);
             m_valid_from = parseJsonString(building, "plati_od", m_valid_from);
-            m_finished = parseJsonString(building, "dokonceni", m_finished);
+            m_finished = TracerUtils.convertDate(parseJsonString(building, "dokonceni", m_finished));
         }
 
         // address places
@@ -227,6 +240,36 @@ public final class RuianRecord extends TracerRecord {
     }
 
     /**
+     * Fill record from a StavebniObjekt feature of the ČÚZK RÚIAN service
+     *
+     * @param feature Feature with attributes and geometry
+     * @param pos Traced position, selects the part of a multi-part building
+     * @throws IOException Geometry without any outer ring
+     */
+    public void parseCuzk(JsonObject feature, LatLon pos) throws IOException {
+
+        init();
+        m_source = "cuzk:ruian";
+
+        CuzkRuian.Polygon part = CuzkRuian.partAt(feature.getJsonObject("geometry"), pos);
+        super.setOuter(part.outer);
+        for (List<LatLon> inner : part.inners)
+            super.addInner(inner);
+
+        JsonObject attrs = feature.getJsonObject("attributes");
+        m_ruian_id = CuzkRuian.number(attrs, "kod");
+        m_levels = (int) Math.max(0, CuzkRuian.number(attrs, "pocetpodlazi"));
+        m_flats = (int) Math.max(0, CuzkRuian.number(attrs, "pocetbytu"));
+        long usage = CuzkRuian.number(attrs, "zpusobvyuzitikod");
+        if (usage > 0) {
+            m_usage_code = Long.toString(usage);
+            m_usage_key = "building";
+            m_usage_val = BUILDING_BY_USAGE.getOrDefault((int) usage, "");
+        }
+        m_finished = CuzkRuian.date(attrs, "dokonceni");
+    }
+
+    /**
      * Returns the number of levels in the building
      *
      * @return Number of levels
@@ -258,7 +301,7 @@ public final class RuianRecord extends TracerRecord {
      * @return Date of finish
      */
     public String getBuildingFinished() {
-        return TracerUtils.convertDate(m_finished);
+        return m_finished;
     }
 
     /**
