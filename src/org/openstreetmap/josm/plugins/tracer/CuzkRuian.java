@@ -35,10 +35,12 @@ import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
+import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
 
 /**
- * Point queries against the RÚIAN map service of ČÚZK (ArcGIS REST, layers in WGS84).
+ * Point queries against the RÚIAN map service of ČÚZK (ArcGIS REST). Coordinates travel in
+ * S-JTSK and {@link SJtsk} converts them: the service's own WGS84 output is up to 0.45 m off.
  */
 public final class CuzkRuian {
 
@@ -72,17 +74,18 @@ public final class CuzkRuian {
      * @throws IOException Network failure or an error reported by the service
      */
     public static JsonObject featureAt(String baseUrl, int layer, LatLon pos, String outFields) throws IOException {
+        EastNorth en = SJtsk.fromEtrs89(pos);
         JsonObject point = Json.createObjectBuilder()
-            .add("x", pos.lon())
-            .add("y", pos.lat())
-            .add("spatialReference", Json.createObjectBuilder().add("wkid", 4326))
+            .add("x", en.east())
+            .add("y", en.north())
+            .add("spatialReference", Json.createObjectBuilder().add("wkid", 5514))
             .build();
 
         Map<String, String> params = new LinkedHashMap<>();
         params.put("geometry", point.toString());
         params.put("geometryType", "esriGeometryPoint");
-        params.put("inSR", "4326");
-        params.put("outSR", "4326");
+        params.put("inSR", "5514");
+        params.put("outSR", "5514");
         params.put("spatialRel", "esriSpatialRelIntersects");
         params.put("outFields", outFields);
         params.put("returnGeometry", "true");
@@ -195,13 +198,15 @@ public final class CuzkRuian {
         return ((JsonNumber) v).longValue();
     }
 
-    private static List<LatLon> readRing(JsonArray arr) {
+    private static List<LatLon> readRing(JsonArray arr) throws IOException {
         List<LatLon> ring = new ArrayList<>(arr.size());
         for (int i = 0; i < arr.size(); i++) {
             JsonArray node = arr.getJsonArray(i);
+            LatLon etrs = SJtsk.toEtrs89(new EastNorth(
+                node.getJsonNumber(0).doubleValue(), node.getJsonNumber(1).doubleValue()));
             LatLon coor = new LatLon(
-                LatLon.roundToOsmPrecision(node.getJsonNumber(1).doubleValue()),
-                LatLon.roundToOsmPrecision(node.getJsonNumber(0).doubleValue()));
+                LatLon.roundToOsmPrecision(etrs.lat()),
+                LatLon.roundToOsmPrecision(etrs.lon()));
             if (ring.isEmpty() || !ring.get(ring.size() - 1).equals(coor))
                 ring.add(coor);
         }
