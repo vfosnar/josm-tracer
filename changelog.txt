@@ -9,3 +9,4 @@ Changelog
 - Server URL could be changed [Marian Kyral]
 - Used building type from RUIAN and RUIAN ID is added [Marian Kyral]
 - RUIAN and RUIAN Lands read directly from the ČÚZK RÚIAN service instead of poloha.net; custom RUIAN server URL removed
+- RUIAN and RUIAN Lands convert S-JTSK with the ČÚZK transformation table instead of the service's WGS84 output (up to 0.45 m off)

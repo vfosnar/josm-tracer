@@ -1,6 +1,6 @@
 # S-JTSK to ETRS89 in the RUIAN-ČÚZK modules
 
-The RUIAN-ČÚZK and RUIAN-Lands-ČÚZK modules ask the ČÚZK RÚIAN service for geometry in S-JTSK
+The RUIAN and RUIAN Lands modules of this branch ask the ČÚZK RÚIAN service for geometry in S-JTSK
 (`inSR=outSR=5514`) and convert it in the plugin with `SJtsk.java`, the transformation ČÚZK
 publishes: the S-JTSK to S-JTSK/05 table (`cz_cuzk_table_-y-x_3_v1710`), Modified Krovak and the
 S-JTSK/05 to ETRS89 Helmert (EPSG:5226). It is the operation PROJ reports as

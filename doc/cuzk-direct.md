@@ -14,7 +14,8 @@ This branch (`cuzk-direct`) of mkyral/josm-tracer reads RUIAN buildings and parc
 | LPIS | `https://mze.gov.cz/public/app/wms/plpis_wfs.fcgi` (WFS, `LPIS_DPB_UCINNE`) | unchanged by this branch |
 | Classic | local TracerServer | unchanged |
 
-Queries are in WGS84 (`inSR=outSR=4326`). The plugin takes the polygon part that contains the
+Queries and geometry are in S-JTSK (`inSR=outSR=5514`), converted to ETRS89 in the plugin with the
+ČÚZK transformation table ([cuzk-transform.md](cuzk-transform.md)). The plugin takes the polygon part that contains the
 click, with its holes (Esri outer rings run clockwise). Code: `src/.../tracer/CuzkRuian.java`.
 The custom RUIAN server URL setting is gone: it pointed the modules at a poloha.net-protocol
 server, and nothing speaks that protocol for this code any more.

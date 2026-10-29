@@ -21,7 +21,7 @@ Currently, following modules are available:
 * LPIS - landuse from Czech Department of Agriculture
 * RUIAN Lands - an special and experimental module for landuses from RUIAN parcels (same ČÚZK service)
 
-  Both convert S-JTSK to ETRS89 with the ČÚZK transformation table (© ČÚZK, CC BY 4.0), see [doc/cuzk-transform.md](doc/cuzk-transform.md)
+  RUIAN and RUIAN Lands convert S-JTSK to ETRS89 with the ČÚZK transformation table (© ČÚZK, CC BY 4.0), see [doc/cuzk-transform.md](doc/cuzk-transform.md)
 
 On plugin configuration page you can activate only modules you want to use.
 
