@@ -23,6 +23,8 @@ Currently, following modules are available:
 * RUIAN-ČÚZK - buildings from RUIAN, read directly from the [ČÚZK RÚIAN map service](https://ags.cuzk.gov.cz/arcgis/rest/services/RUIAN/Prohlizeci_sluzba_nad_daty_RUIAN/MapServer)
 * RUIAN-Lands-ČÚZK - RUIAN Lands read from the same ČÚZK service
 
+  Both convert S-JTSK to ETRS89 with the ČÚZK transformation table (© ČÚZK, CC BY 4.0), see [doc/cuzk-transform.md](doc/cuzk-transform.md)
+
 On plugin configuration page you can activate only modules you want to use.
 
 ## Work with Tracer
